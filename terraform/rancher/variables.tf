@@ -57,3 +57,9 @@ variable "rke2_version" {
   description = "The RKE2 version to install"
   default     = "v1.24.9+rke2r1"
 }
+
+variable "worker_count" {
+  type        = number
+  description = "The amount of worker nodes to create"
+  default     = 3
+}

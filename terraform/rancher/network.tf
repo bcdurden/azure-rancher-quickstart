@@ -24,3 +24,20 @@ resource "azurerm_network_interface" "rancher_server_interface" {
     demo_type = "bigbang"
   }
 }
+resource "azurerm_network_interface" "rancher_worker_interfaces" {
+  count = var.worker_count
+
+  name                = "rancher-worker-interface-${count.index}"
+  location            = data.azurerm_resource_group.rancher_demo.location
+  resource_group_name = data.azurerm_resource_group.rancher_demo.name
+
+  ip_configuration {
+    name                          = "rancher_worker_ip_config-${count.index}"
+    subnet_id                     = data.azurerm_subnet.rancher_bigbang.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  tags = {
+    demo_type = "bigbang"
+  }
+}
