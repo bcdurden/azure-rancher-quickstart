@@ -34,7 +34,13 @@ locals {
   node_username = "azureuser"
 }
 
-variable "instance_type" {
+variable "rancher_cp_instance_type" {
+  type        = string
+  description = "Instance type used for all linux virtual machines"
+  default     = "Standard_DS2_v2"
+}
+
+variable "rancher_worker_instance_type" {
   type        = string
   description = "Instance type used for all linux virtual machines"
   default     = "Standard_DS2_v2"

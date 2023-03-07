@@ -8,7 +8,7 @@ resource "azurerm_linux_virtual_machine" "rancher_server" {
   location              = data.azurerm_resource_group.rancher_demo.location
   resource_group_name   = data.azurerm_resource_group.rancher_demo.name
   network_interface_ids = [azurerm_network_interface.rancher_server_interface.id]
-  size                  = var.instance_type
+  size                  = var.rancher_cp_instance_type
   admin_username        = local.node_username
 
   source_image_reference {
@@ -61,7 +61,7 @@ resource "azurerm_linux_virtual_machine" "workers" {
   location              = data.azurerm_resource_group.rancher_demo.location
   resource_group_name   = data.azurerm_resource_group.rancher_demo.name
   network_interface_ids = [azurerm_network_interface.rancher_worker_interfaces[count.index].id]
-  size                  = var.instance_type
+  size                  = var.rancher_worker_instance_type
   admin_username        = local.node_username
 
   source_image_reference {
