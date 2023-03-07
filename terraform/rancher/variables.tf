@@ -29,3 +29,31 @@ variable "azure_location" {
   description = "Azure location used for all resources"
   default     = "East US"
 }
+
+locals {
+  node_username = "azureuser"
+}
+
+variable "instance_type" {
+  type        = string
+  description = "Instance type used for all linux virtual machines"
+  default     = "Standard_DS2_v2"
+}
+
+variable "cluster_token" {
+  type        = string
+  description = "The token for cluster joining in RKE2"
+  default     = "mysharedtoken"
+}
+
+variable "rancher_server_dns" {
+  type        = string
+  description = "The DNS entry for rancher server"
+  default     = "rancher.lol"
+}
+
+variable "rke2_version" {
+  type        = string
+  description = "The RKE2 version to install"
+  default     = "v1.24.9+rke2r1"
+}

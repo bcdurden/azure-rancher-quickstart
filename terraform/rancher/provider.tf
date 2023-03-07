@@ -12,6 +12,14 @@ terraform {
       source  = "hashicorp/tls"
       version = "3.4.0"
     }
+    cloudinit = {
+      source = "hashicorp/cloudinit"
+      version = "2.3.2"
+    }
+    ssh = {
+      source  = "loafoe/ssh"
+      version = "1.2.0"
+    }
   }
   required_version = ">= 1.0.0"
 }
@@ -23,4 +31,6 @@ provider "azurerm" {
   client_id       = var.azure_client_id
   client_secret   = var.azure_client_secret
   tenant_id       = var.azure_tenant_id
+}
+provider "cloudinit" {
 }
