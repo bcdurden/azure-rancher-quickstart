@@ -19,7 +19,6 @@ AZURE_CLIENT_ID=
 AZURE_CLIENT_SECRET=
 AZURE_SUBSCRIPTION_ID=
 AZURE_TENANT_ID=
-AZURE_LOCATION="East US"
 
 check-tools: ## Check to make sure you have the right tools
 	$(foreach exec,$(REQUIRED_BINARIES),\
@@ -30,15 +29,15 @@ infra: check-tools
 rancher: check-tools  # state stored locally
 	@printf "\n====> Terraforming RKE2 + Rancher\n";
 	@kubecm delete $(LOCAL_CLUSTER_NAME) || true
-	@$(MAKE) _terraform COMPONENT=rancher VARS='TF_VAR_worker_count=$(RKE2_WORKER_COUNT) TF_VAR_azure_client_id="$(AZURE_CLIENT_ID)" TF_VAR_azure_client_secret="$(AZURE_CLIENT_SECRET)" TF_VAR_azure_subscription_id="$(AZURE_SUBSCRIPTION_ID)" TF_VAR_azure_tenant_id="$(AZURE_TENANT_ID)" TF_VAR_azure_location="$(AZURE_LOCATION)" TF_VAR_rancher_cp_instance_type="$(RKE2_CP_VM_TYPE)" TF_VAR_rancher_worker_instance_type="$(RKE2_WORKER_VM_TYPE)"'
+	@$(MAKE) _terraform COMPONENT=rancher VARS='TF_VAR_rancher_server_dns=$(RANCHER_URL) TF_VAR_worker_count=$(RKE2_WORKER_COUNT) TF_VAR_azure_client_id="$(AZURE_CLIENT_ID)" TF_VAR_azure_client_secret="$(AZURE_CLIENT_SECRET)" TF_VAR_azure_subscription_id="$(AZURE_SUBSCRIPTION_ID)" TF_VAR_azure_tenant_id="$(AZURE_TENANT_ID)" TF_VAR_rancher_cp_instance_type="$(RKE2_CP_VM_TYPE)" TF_VAR_rancher_worker_instance_type="$(RKE2_WORKER_VM_TYPE)"'
 	@cp ${TERRAFORM_DIR}/rancher/kube_config_server.yaml /tmp/$(LOCAL_CLUSTER_NAME).yaml && kubecm add -c -f /tmp/$(LOCAL_CLUSTER_NAME).yaml && rm /tmp/$(LOCAL_CLUSTER_NAME).yaml
 	@kubectx $(LOCAL_CLUSTER_NAME)
 	@helm upgrade --install cert-manager -n cert-manager --create-namespace --set installCRDs=true https://charts.jetstack.io/charts/cert-manager-v$(CERT_MANAGER_VERSION).tgz
-	@helm upgrade --install rancher -n cattle-system --create-namespace --set hostname=$(RANCHER_URL) --set replicas=$(RKE2_WORKER_COUNT) --set bootstrapPassword=admin https://releases.rancher.com/server-charts/latest/rancher-$(RANCHER_VERSION)).tgz
+	@helm upgrade --install rancher -n cattle-system --create-namespace --set hostname=$(RANCHER_URL) --set replicas=$(RKE2_WORKER_COUNT) --set bootstrapPassword=admin https://releases.rancher.com/server-charts/latest/rancher-$(RANCHER_VERSION).tgz
 rancher-delete: rancher-destroy
 rancher-destroy: check-tools
 	@printf "\n====> Destroying RKE2 + Rancher\n";
-	@$(MAKE) _terraform-destroy COMPONENT=rancher VARS='TF_VAR_azure_client_secret="$(AZURE_CLIENT_SECRET)" TF_VAR_azure_subscription_id="$(AZURE_SUBSCRIPTION_ID)" TF_VAR_azure_tenant_id="$(AZURE_TENANT_ID)" TF_VAR_azure_location="$(AZURE_LOCATION)"'
+	@$(MAKE) _terraform-destroy COMPONENT=rancher VARS='TF_VAR_azure_client_id="$(AZURE_CLIENT_ID)" TF_VAR_azure_client_secret="$(AZURE_CLIENT_SECRET)" TF_VAR_azure_subscription_id="$(AZURE_SUBSCRIPTION_ID)" TF_VAR_azure_tenant_id="$(AZURE_TENANT_ID)" TF_VAR_azure_location="$(AZURE_LOCATION)"'
 	@kubecm delete $(LOCAL_CLUSTER_NAME) || true
 
 
