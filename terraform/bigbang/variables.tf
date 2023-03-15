@@ -47,7 +47,7 @@ variable "rancher_cp_instance_type" {
 variable "rancher_worker_instance_type" {
   type        = string
   description = "Instance type used for all linux virtual machines"
-  default     = "Standard_DS2_v2"
+  default     = "Standard_D4s_v3"
 }
 
 variable "cluster_token" {
@@ -71,4 +71,10 @@ variable "worker_count" {
   type        = number
   description = "The amount of worker nodes to create"
   default     = 3
+}
+
+variable "workload_cluster_name" {
+  type = string
+  description = "Name of the workload cluster to be imported"
+  default = "bigbang"
 }

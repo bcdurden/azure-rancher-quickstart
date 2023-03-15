@@ -41,6 +41,8 @@ data "cloudinit_config" "worker_config" {
         content: |
           token: ${var.cluster_token}
           server: https://${azurerm_linux_virtual_machine.rancher_server.private_ip_address}:9345
+      bootcmd: 
+      - sysctl -w vm.max_map_count=262144
       runcmd:
       - curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" INSTALL_RKE2_VERSION=${var.rke2_version} sh -
       - systemctl enable rke2-agent.service
