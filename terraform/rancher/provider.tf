@@ -22,6 +22,13 @@ terraform {
     }
   }
   required_version = ">= 1.0.0"
+
+  backend "azurerm" {
+    resource_group_name  = "rancher-bigbang"
+    storage_account_name = "rgsazurestore"
+    container_name       = "tfstate"
+    key                  = "rancher.terraform.tfstate"
+  }
 }
 
 provider "azurerm" {

@@ -69,3 +69,8 @@ variable "worker_count" {
   description = "The amount of worker nodes to create"
   default     = 3
 }
+
+variable "admin_password" {
+    type = string
+    default = "rgsftw314314"
+}
